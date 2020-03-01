@@ -3,6 +3,8 @@ const cheerio = require('cheerio');
 // Nightmare
 const Nightmare = require('nightmare');
 const nightmare = Nightmare({ show: true });
+const regularRequest = require('request');
+const fs = require('fs');
 
 async function scrapeTitlesRanksAndRatings() {
   const result = await request.get(
@@ -64,12 +66,20 @@ async function scrapePosterImageUrl(movies) {
           ).attr('src')
         );
       movies[i].posterImageUrl = posterImageUrl;
-      console.log(movies[i]);
+      savePosterImagesToDisk(movies[i]);
+      //console.log(movies[i]);
     } catch (err) {
       console.log(err);
     }
   }
   return movies;
+}
+
+// Save Images to disk
+async function savePosterImagesToDisk(movie) {
+  regularRequest
+    .get(movie.posterImageUrl)
+    .pipe(fs.createWriteStream(`posters/${movie.rank}.png`));
 }
 
 async function main() {
