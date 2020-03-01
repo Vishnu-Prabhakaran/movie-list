@@ -6,9 +6,17 @@ async function scrapeTitlesRanksAndRatings() {
     'https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_250'
   );
   const $ = await cheerio.load(result);
-  const movies = $('td.titleColumn > a')
+  const movies = $('tr')
     .map((i, e) => {
-      return $(e).text();
+      const title = $(e)
+        .find('td.titleColumn > a')
+        .text();
+      const imdbRating = $(e)
+        .find('td.ratingColumn.imdbRating')
+        .text()
+        .trim();
+
+      return { title, imdbRating };
     })
     .get();
   console.log(movies);
