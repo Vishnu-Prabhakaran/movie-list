@@ -11,12 +11,17 @@ async function scrapeTitlesRanksAndRatings() {
       const title = $(e)
         .find('td.titleColumn > a')
         .text();
+      const descriptionUrl =
+        'https://www.imdb.com' +
+        $(e)
+          .find('td.titleColumn > a')
+          .attr('href');
       const imdbRating = $(e)
         .find('td.ratingColumn.imdbRating')
         .text()
         .trim();
-      // Rank is the index 
-      return { title, imdbRating, rank: i };
+      // Rank is the index
+      return { title, imdbRating, rank: i, descriptionUrl };
     })
     .get();
   console.log(movies);
