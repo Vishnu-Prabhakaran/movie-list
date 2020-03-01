@@ -15,8 +15,8 @@ async function scrapeTitlesRanksAndRatings() {
         .find('td.ratingColumn.imdbRating')
         .text()
         .trim();
-
-      return { title, imdbRating };
+      // Rank is the index 
+      return { title, imdbRating, rank: i };
     })
     .get();
   console.log(movies);
